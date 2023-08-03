@@ -11,16 +11,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => CounterCubit(),
-      child: MaterialApp(
-        title: 'Flutter Bloc Access',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-          useMaterial3: true,
-        ),
-        home: const MyHomePage(title: 'Flutter Bloc Access Home Page'),
+    return MaterialApp(
+      title: 'Flutter Bloc Access',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+        useMaterial3: true,
       ),
+      home: const MyHomePage(title: 'Flutter Bloc Access Home Page'),
     );
   }
 }
@@ -38,32 +35,36 @@ class MyHomePage extends StatelessWidget {
         title: Text(title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              // '${BlocProvider.of<CounterCubit>(context).state.counter}',
-              '${context.watch<CounterCubit>().state.counter}',
-              // style: Theme.of(context).textTheme.headlineMedium,
-              style: const TextStyle(
-                color: Colors.blue,
-                fontSize: 52.0,
-              ),
-            ),
-            ElevatedButton(
-              child: const Text(
-                'increment',
-                style: TextStyle(
+        child: BlocProvider(
+          create: (context) => CounterCubit(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                // build() 에서 제공하는 context 에 CounterCubit 이 없으므로 에러 발생
+                // '${BlocProvider.of<CounterCubit>(context).state.counter}',
+                '${context.watch<CounterCubit>().state.counter}',
+                // style: Theme.of(context).textTheme.headlineMedium,
+                style: const TextStyle(
                   color: Colors.blue,
-                  fontSize: 20.0,
+                  fontSize: 52.0,
                 ),
               ),
-              onPressed: () {
-                // BlocProvider.of<CounterCubit>(context).increment();
-                context.read<CounterCubit>().increment();
-              },
-            ),
-          ],
+              ElevatedButton(
+                child: const Text(
+                  'increment',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    fontSize: 20.0,
+                  ),
+                ),
+                onPressed: () {
+                  // BlocProvider.of<CounterCubit>(context).increment();
+                  context.read<CounterCubit>().increment();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
