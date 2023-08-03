@@ -37,47 +37,40 @@ class MyHomePage extends StatelessWidget {
       body: Center(
         child: BlocProvider(
           create: (context) => CounterCubit(),
-          child: const ChildWidget(),
+          child: Builder(
+            builder: (context) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    // Provider() 하위에 Builder widget 으로 CounterCubit 으로 포함하는 context 제공
+                    // '${BlocProvider.of<CounterCubit>(context).state.counter}',
+                    '${context.watch<CounterCubit>().state.counter}',
+                    // style: Theme.of(context).textTheme.headlineMedium,
+                    style: const TextStyle(
+                      color: Colors.blue,
+                      fontSize: 52.0,
+                    ),
+                  ),
+                  ElevatedButton(
+                    child: const Text(
+                      'increment',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        fontSize: 20.0,
+                      ),
+                    ),
+                    onPressed: () {
+                      // BlocProvider.of<CounterCubit>(context).increment();
+                      context.read<CounterCubit>().increment();
+                    },
+                  ),
+                ],
+              );
+            },
+          ),
         ),
       ),
-    );
-  }
-}
-
-class ChildWidget extends StatelessWidget {
-  const ChildWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text(
-          // build() 에서 제공하는 context 에 CounterCubit 이 위치하도록 별도의 child widget 으로 분리시킴
-          // '${BlocProvider.of<CounterCubit>(context).state.counter}',
-          '${context.watch<CounterCubit>().state.counter}',
-          // style: Theme.of(context).textTheme.headlineMedium,
-          style: const TextStyle(
-            color: Colors.blue,
-            fontSize: 52.0,
-          ),
-        ),
-        ElevatedButton(
-          child: const Text(
-            'increment',
-            style: TextStyle(
-              color: Colors.blue,
-              fontSize: 20.0,
-            ),
-          ),
-          onPressed: () {
-            // BlocProvider.of<CounterCubit>(context).increment();
-            context.read<CounterCubit>().increment();
-          },
-        ),
-      ],
     );
   }
 }
