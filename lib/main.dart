@@ -1,4 +1,6 @@
+import 'package:bloc_context/cubits/counter/counter_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() {
   runApp(const MyApp());
@@ -9,13 +11,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Bloc Access',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
+    return BlocProvider(
+      create: (context) => CounterCubit(),
+      child: MaterialApp(
+        title: 'Flutter Bloc Access',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+          useMaterial3: true,
+        ),
+        home: const MyHomePage(title: 'Flutter Bloc Access Home Page'),
       ),
-      home: const MyHomePage(title: 'Flutter Bloc Access Home Page'),
     );
   }
 }
@@ -36,10 +41,11 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              '0',
+            Text(
+              // '${BlocProvider.of<CounterCubit>(context).state.counter}',
+              '${context.watch<CounterCubit>().state.counter}',
               // style: Theme.of(context).textTheme.headlineMedium,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.blue,
                 fontSize: 52.0,
               ),
@@ -52,7 +58,10 @@ class MyHomePage extends StatelessWidget {
                   fontSize: 20.0,
                 ),
               ),
-              onPressed: () {},
+              onPressed: () {
+                // BlocProvider.of<CounterCubit>(context).increment();
+                context.read<CounterCubit>().increment();
+              },
             ),
           ],
         ),
