@@ -39,6 +39,7 @@ class MyHomePage extends StatelessWidget {
           create: (context) => CounterCubit(),
           child: Builder(
             builder: (context) {
+              // build context 제공
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
